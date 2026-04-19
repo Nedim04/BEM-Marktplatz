@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import BewerbungsFormular from "./BewerbungsFormular";
+import BewerbungAktionen from "./BewerbungAktionen";
 
 export default async function AufgabeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -122,6 +123,7 @@ export default async function AufgabeDetailPage({ params }: { params: Promise<{ 
                         {b.nachricht && (
                           <p className="text-sm text-zinc-500 mt-2 italic">&ldquo;{b.nachricht}&rdquo;</p>
                         )}
+                        <BewerbungAktionen bewerbungId={b.id} currentStatus={b.status} />
                       </div>
                     ))}
                   </div>

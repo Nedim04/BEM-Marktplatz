@@ -131,7 +131,30 @@ create or replace view public.aufgaben_mit_profil as
   from public.aufgaben a
   join public.profiles p on p.id = a.erstellt_von;
 
--- 5. Beispieldaten (optional, zum Testen)
+-- 5. API Keys für KI-Agenten
+create table if not exists public.api_keys (
+  id                  uuid default gen_random_uuid() primary key,
+  user_id             uuid references public.profiles(id) on delete cascade not null,
+  name                text not null,
+  key_value           text not null,
+  prefix              text not null,
+  aktiv               boolean default true,
+  erstellt_am         timestamptz default now(),
+  zuletzt_genutzt_am  timestamptz
+);
+
+alter table public.api_keys enable row level security;
+
+create policy "Eigene API Keys lesbar"
+  on public.api_keys for select using (auth.uid() = user_id);
+
+create policy "Eigene API Keys erstellen"
+  on public.api_keys for insert with check (auth.uid() = user_id);
+
+create policy "Eigene API Keys löschen"
+  on public.api_keys for delete using (auth.uid() = user_id);
+
+-- 6. Beispieldaten (optional, zum Testen)
 -- Wird nur eingefügt wenn die Tabelle leer ist
 -- insert into public.aufgaben (erstellt_von, titel, beschreibung, kategorie, standort, budget)
 -- select id, 'Testaufgabe', 'Beschreibung', 'Marketing', 'Berlin', 45

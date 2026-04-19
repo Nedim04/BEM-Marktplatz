@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import ApiKeys from "./ApiKeys";
 
 // Supabase wird lazy importiert, damit fehlende Env-Vars einen klaren Fehler zeigen
 async function getSupabase() {
@@ -46,6 +47,12 @@ export default async function DashboardPage() {
         .eq("anbieter_id", user.id)
         .order("erstellt_am", { ascending: false })
         .limit(10);
+
+  const { data: apiKeys } = await supabase
+    .from("api_keys")
+    .select("id, name, prefix, aktiv, erstellt_am, zuletzt_genutzt_am")
+    .eq("user_id", user.id)
+    .order("erstellt_am", { ascending: false });
 
   const { data: offeneAufgaben } = await supabase
     .from("aufgaben")
@@ -191,6 +198,9 @@ export default async function DashboardPage() {
                 ))}
               </div>
             </div>
+
+            {/* API Keys */}
+            <ApiKeys initialKeys={(apiKeys ?? []) as { id: string; name: string; prefix: string; aktiv: boolean; erstellt_am: string }[]} />
 
             {/* Profil-Vollständigkeit */}
             <div className="bg-zinc-900 rounded-2xl p-6 text-white">
