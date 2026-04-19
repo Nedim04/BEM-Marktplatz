@@ -1,6 +1,13 @@
+export const dynamic = "force-dynamic";
+
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+
+// Supabase wird lazy importiert, damit fehlende Env-Vars einen klaren Fehler zeigen
+async function getSupabase() {
+  const { createClient } = await import("@/lib/supabase/server");
+  return createClient();
+}
 
 async function signOut() {
   "use server";
@@ -11,7 +18,7 @@ async function signOut() {
 }
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
