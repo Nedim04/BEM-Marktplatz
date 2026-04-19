@@ -82,7 +82,7 @@ Anfragen an: datenschutz@bem-marktplatz.de`,
         ))}
 
         <div className="mt-10 pt-8 border-t border-zinc-100 text-sm text-zinc-400">
-          <Link href="/agb" className="underline">AGB</Link> · <Link href="/support" className="underline">Support</Link>
+          <Link href="/impressum" className="underline">Impressum</Link> · <Link href="/agb" className="underline">AGB</Link> · <Link href="/support" className="underline">Support</Link>
         </div>
       </div>
     </div>

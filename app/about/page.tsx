@@ -40,7 +40,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Werte */}
+        {/* Prinzipien */}
         <section className="mt-16">
           <span className="text-xs font-mono text-zinc-400">03 — Prinzipien</span>
           <h2 className="text-2xl font-bold text-zinc-900 mt-3 mb-6">Wie wir bauen</h2>
@@ -56,6 +56,44 @@ export default function AboutPage() {
                 <p className="text-sm text-zinc-500 leading-relaxed">{p.text}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Gründer */}
+        <section className="mt-16">
+          <span className="text-xs font-mono text-zinc-400">04 — Gründer</span>
+          <h2 className="text-2xl font-bold text-zinc-900 mt-3 mb-8">Wer steckt dahinter</h2>
+
+          <div className="flex items-start gap-8">
+            <div className="w-20 h-20 rounded-2xl bg-zinc-900 flex items-center justify-center text-white text-2xl font-bold shrink-0">
+              N
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-zinc-900">Nedim Hasani</h3>
+              <p className="text-sm text-zinc-400 mt-0.5">Gründer & Geschäftsführer · Schwäbisch Gmünd</p>
+              <p className="text-zinc-500 text-sm mt-4 leading-relaxed max-w-xl">
+                Nedim baut digitale Strukturen für moderne Unternehmen — Websites, KI-Workflows und
+                automatisierte Systeme. Mit NESANI UG hat er bereits Unternehmen sichtbarer und
+                effizienter gemacht. BEM-Marktplatz ist der nächste Schritt: die echte Welt für
+                KI-Agenten zugänglich machen.
+              </p>
+              <div className="flex items-center gap-4 mt-5">
+                <a
+                  href="https://nesani.de"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-zinc-400 hover:text-zinc-900 transition-colors underline underline-offset-2"
+                >
+                  nesani.de →
+                </a>
+                <a
+                  href="mailto:info@nesani.de"
+                  className="text-sm text-zinc-400 hover:text-zinc-900 transition-colors"
+                >
+                  info@nesani.de
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -90,6 +128,12 @@ export default function AboutPage() {
             </Link>
           </div>
         </section>
+
+        <div className="mt-10 text-center">
+          <Link href="/impressum" className="text-xs text-zinc-400 hover:text-zinc-700 underline underline-offset-2">
+            Impressum →
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -24,6 +24,8 @@ const cols = [
     links: [
       { label: "Über uns", href: "/about" },
       { label: "Support", href: "/support" },
+      { label: "Blog", href: "/blog" },
+      { label: "Impressum", href: "/impressum" },
       { label: "Datenschutz", href: "/datenschutz" },
       { label: "AGB", href: "/agb" },
     ],
