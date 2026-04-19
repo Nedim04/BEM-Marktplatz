@@ -1,9 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return;
+    import("@/lib/supabase/client").then(({ createClient }) => {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => setUser(data.user));
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) =>
+        setUser(s?.user ?? null)
+      );
+      return () => subscription.unsubscribe();
+    });
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-zinc-100">
@@ -13,32 +27,36 @@ export default function Nav() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-600">
-          <Link href="#aufgaben" className="hover:text-zinc-900 transition-colors">Aufgaben</Link>
-          <Link href="#bounties" className="hover:text-zinc-900 transition-colors">Bounties</Link>
-          <Link href="#agenten" className="hover:text-zinc-900 transition-colors">Für Agenten</Link>
-          <Link href="#wie-es-funktioniert" className="hover:text-zinc-900 transition-colors">So funktionierts</Link>
+          <Link href="/bounties" className="hover:text-zinc-900 transition-colors">Bounties</Link>
+          <Link href="/api-docs" className="hover:text-zinc-900 transition-colors">API</Link>
+          <Link href="/mcp" className="hover:text-zinc-900 transition-colors">MCP</Link>
+          <Link href="/about" className="hover:text-zinc-900 transition-colors">Über uns</Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <Link
-            href="/login"
-            className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
-          >
-            Anmelden
-          </Link>
-          <Link
-            href="/signup"
-            className="text-sm bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-700 transition-colors"
-          >
-            Registrieren →
-          </Link>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="text-sm bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-700 transition-colors"
+            >
+              Dashboard →
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors">
+                Anmelden
+              </Link>
+              <Link
+                href="/signup"
+                className="text-sm bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-700 transition-colors"
+              >
+                Registrieren →
+              </Link>
+            </>
+          )}
         </div>
 
-        <button
-          className="md:hidden p-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Menü öffnen"
-        >
+        <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menü öffnen">
           <span className="block w-5 h-px bg-zinc-900 mb-1.5" />
           <span className="block w-5 h-px bg-zinc-900 mb-1.5" />
           <span className="block w-5 h-px bg-zinc-900" />
@@ -47,13 +65,19 @@ export default function Nav() {
 
       {open && (
         <div className="md:hidden border-t border-zinc-100 bg-white px-6 py-4 flex flex-col gap-4 text-sm text-zinc-700">
-          <Link href="#aufgaben" onClick={() => setOpen(false)}>Aufgaben</Link>
-          <Link href="#bounties" onClick={() => setOpen(false)}>Bounties</Link>
-          <Link href="#agenten" onClick={() => setOpen(false)}>Für Agenten</Link>
-          <Link href="#wie-es-funktioniert" onClick={() => setOpen(false)}>So funktionierts</Link>
-          <Link href="/signup" className="bg-zinc-900 text-white px-4 py-2 rounded-full text-center">
-            Registrieren →
-          </Link>
+          <Link href="/bounties" onClick={() => setOpen(false)}>Bounties</Link>
+          <Link href="/api-docs" onClick={() => setOpen(false)}>API-Docs</Link>
+          <Link href="/mcp" onClick={() => setOpen(false)}>MCP Setup</Link>
+          <Link href="/about" onClick={() => setOpen(false)}>Über uns</Link>
+          {user ? (
+            <Link href="/dashboard" className="bg-zinc-900 text-white px-4 py-2 rounded-full text-center">
+              Dashboard →
+            </Link>
+          ) : (
+            <Link href="/signup" className="bg-zinc-900 text-white px-4 py-2 rounded-full text-center">
+              Registrieren →
+            </Link>
+          )}
         </div>
       )}
     </header>
